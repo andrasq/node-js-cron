@@ -75,7 +75,7 @@ module.exports = {
             now += 1;
             t.ok(info._start <= now);
             t.ok(now % 30 < 3);
-            if (++callCount >= 5) {
+            if (++callCount === 5) {
                 cron.cancelCall(info);
                 t.done();
             }
