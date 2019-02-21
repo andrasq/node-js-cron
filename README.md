@@ -75,10 +75,10 @@ thereafter (else just once).  This just computes the appropriate time offset and
 
 Takes the same arguments as schedule call, either a function with optional at and
 interval, or an options object, but unlike for scheduleCall, here "at" is optional and
-default to now.
+defaults to immediately.
 
 
 Changelog
 ---------
 
-- 0.9.0 - first release
+- 0.2.0 - first release
