@@ -42,7 +42,7 @@ As above, but the call can also be scheduled with an options object containing f
 
 - func - the function to call, required.
 - at - milliseconds past midnight of the call, required.
-- repeat - milliseconds between calls, required.  Use <= 0 to call only once.
+- repeat - milliseconds between calls, default 0.  Use <= 0 to call only once.
 - self - value of `this` when invoking the function, default null.
 - args - array containing arguments to pass to the function, default [].
   If not an array an error is thrown.
