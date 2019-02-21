@@ -1,5 +1,5 @@
 {
-  "name": "js-cron",
+  "name": "qcron",
   "version": "0.2.0",
   "description": "very simple little call scheduler",
   "main": "cron.js",
@@ -7,7 +7,7 @@
   "keywords": [ "cron", "scheduled" ],
 
   "author": "andrasq",
-  "repository": { "type": "git", "url": "git@github.com:andrasq/node-js-cron" },
+  "repository": { "type": "git", "url": "git@github.com:andrasq/node-qcron" },
   "readme": "see README.md in the repo",
 
   "scripts": {

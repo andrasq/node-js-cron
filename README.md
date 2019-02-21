@@ -1,22 +1,22 @@
-js-cron
+qcron
 =======
-[![Build Status](https://api.travis-ci.org/andrasq/node-js-cron.svg?branch=master)](https://travis-ci.org/andrasq/node-js-cron?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/andrasq/node-js-cron/badge.svg?branch=master)](https://coveralls.io/github/andrasq/node-js-cron?branch=master)
+[![Build Status](https://api.travis-ci.org/andrasq/node-qcron.svg?branch=master)](https://travis-ci.org/andrasq/node-qcron?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/andrasq/node-qcron/badge.svg?branch=master)](https://coveralls.io/github/andrasq/node-qcron?branch=master)
 
 Very simple little javascript call scheduler.
 
 It arranges for calls to be made repeatedly on a schedule, optionally passing in call
 arguments, but does not parse crontab syntax.  Errors are not caught.
 
-    jscron = require('js-cron');
+    qcron = require('qcron');
     // call every hour at 15 past the hour
-    jscron.scheduleCall(myFunction, 15*60*1000, 24*60*1000);
+    qcron.scheduleCall(myFunction, 15*60*1000, 24*60*1000);
 
 
 API
 ---
 
-### job = jscron.scheduleCall( func, at [,interval] )
+### job = qcron.scheduleCall( func, at [,interval] )
 
 Call function at "at" milliseconds past midnight GMT then every "interval" milliseconds
 thereafter.  To run only once, specify an "interval" that is not a number greater than zero.
@@ -28,15 +28,15 @@ The contents of the job object are internal to the module, and may change.
 To pass call arguments or an object instance to a method call, use the `options` form of the
 call; see below.
 
-    jscron = require('js-cron');
+    qcron = require('qcron');
     console.log("started at", new Date().getTime());
-    job = jscron.scheduleCall(function() { console.log("running at", new Date().getTime()) }, 20, 1000);
+    job = qcron.scheduleCall(function() { console.log("running at", new Date().getTime()) }, 20, 1000);
     // => "started at 1550721147755"
     //    "running at 1550721148021"
     //    "running at 1550721149021"
     //    ...
 
-### job = jscron.scheduleCall( options )
+### job = qcron.scheduleCall( options )
 
 As above, but the call can also be scheduled with an options object containing fields:
 
@@ -49,24 +49,24 @@ As above, but the call can also be scheduled with an options object containing f
 
 No timezone handling, all times are relative to GMT.
 
-### jobs = jscron.cancelCall( jobOrFunction )
+### jobs = qcron.cancelCall( jobOrFunction )
 
 Cancel the scheduled call identified by "job" or by the actual function that was used.
 Returns an array containing the "job" objects that were canceled.  If jobOrFunction is the
 special string '_all' then all scheduled jobs will be canceled, both one-shot and recurring;
 this is intended mostly for testing.
 
-    job = jscron.scheduleCall(myFunction, myStartOffset, myInterval);
-    job1 = jscron.scheduleCall(myFunction, myStartOffset, myInterval);
-    jscron.cancelCall(job1);
+    job = qcron.scheduleCall(myFunction, myStartOffset, myInterval);
+    job1 = qcron.scheduleCall(myFunction, myStartOffset, myInterval);
+    qcron.cancelCall(job1);
     // => [job1]
 
-    job2 = jscron.scheduleCall(myOtherFunction, myStartOffset);
-    job3 = jscron.scheduleCall(myOtherFunction, myOtherStartOffset);
-    jscron.cancelCall(myOtherFunction);
+    job2 = qcron.scheduleCall(myOtherFunction, myStartOffset);
+    job3 = qcron.scheduleCall(myOtherFunction, myOtherStartOffset);
+    qcron.cancelCall(myOtherFunction);
     // => [job2, job3]
 
-### job = jscron.setTimeout( funcOrOptions, [,at [,interval]] )
+### job = qcron.setTimeout( funcOrOptions, [,at [,interval]] )
 
 Same as `scheduleCall` but starting relative to now, not midnight GMT.  Call "func"
 "at" milliseconds from now (else as soon as possible), then every "interval" milliseconds
