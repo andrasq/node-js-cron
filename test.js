@@ -13,8 +13,8 @@ module.exports = {
         t.throws(function() { cron.scheduleCall() }, /not a function/);
         t.throws(function() { cron.scheduleCall({}) }, /not a function/);
         t.throws(function() { cron.scheduleCall(noop) }, /not a number/);
-        t.throws(function() { cron.scheduleCall(noop, "three") }, /not a number/);
-        t.throws(function() { cron.scheduleCall(noop, 3, "four") }, /not a number/);
+        t.throws(function() { cron.scheduleCall(noop, "three") }, /expected number/);
+        t.throws(function() { cron.scheduleCall(noop, 3, "four") }, /expected number/);
         t.throws(function() { cron.scheduleCall({ func: noop, at: 0, args: 123 }) }, /not an array/);
 
         cron.scheduleCall(noop, offsetNow(2), 0);
@@ -39,6 +39,21 @@ module.exports = {
     'should invoke one-shot without repeat': function(t) {
         var info = cron.scheduleCall(noop, offsetNow(10));
         t.ok(info._start > Date.now());
+        t.done();
+    },
+
+    'should accept human-legible time spec': function(t) {
+        var info;
+        info = cron.scheduleCall(noop, 0, '1000');
+        t.equal(info._repeat, 1000);
+        t.equal(cron.scheduleCall(noop, 0, '2h')._repeat, 7200000);
+        t.equal(cron.scheduleCall(noop, 0, '3m')._repeat, 180000);
+        t.equal(cron.scheduleCall(noop, 0, '4s')._repeat, 4000);
+        t.equal(cron.scheduleCall(noop, 0, '4.5s')._repeat, 4500);
+        t.equal(cron.scheduleCall(noop, 0, '.5s 4000')._repeat, 4500);
+        t.equal(cron.scheduleCall(noop, 0, '4.5s 100')._repeat, 4600);
+        t.equal(cron.scheduleCall(noop, 0, '1d 2 h 3m4s5')._repeat, 93784005);
+        t.throws(function() { cron.scheduleCall(noop, 'x') }, /expected number/);
         t.done();
     },
 
@@ -111,8 +126,8 @@ module.exports = {
 
     'setTimeout should invoke scheduleCall': function(t) {
         t.throws(function(){ cron.setTimeout() }, /not a function/);
-        t.throws(function(){ cron.setTimeout(noop, "three") }, /not a number/);
-        t.throws(function(){ cron.setTimeout(noop, 3, "four") }, /not a number/);
+        t.throws(function(){ cron.setTimeout(noop, "three") }, /expected number/);
+        t.throws(function(){ cron.setTimeout(noop, 3, "four") }, /expected number/);
         cron.setTimeout(noop, 10, -1);
 
         var spy = t.spyOnce(cron, 'scheduleCall');
@@ -136,6 +151,11 @@ module.exports = {
         t.ok(spy.args[0][0].at < Date.now() % Cron.msPerDay + 20);
         t.equal(spy.args[0][0].func, noop);
 
+        t.done();
+    },
+
+    'setTimeout should pass unknown at to scheduleCall': function(t) {
+        t.throws(function() { cron.setTimeout(noop, /regex/) }, /not a number/);
         t.done();
     },
 }

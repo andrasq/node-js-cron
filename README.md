@@ -25,6 +25,11 @@ Each subsequent call is scheduled after the function returns, to not overlap cal
 "interval" seconds.  Returns an opaque "job" object that can be used to cancel the call.
 The contents of the job object are internal to the module, and may change.
 
+"At" and "interval" can be specified with units, as eg "2h 15m" for two hours and fifteen
+minutes.  The units must be one of 'd', 'h', 'm', or 's': days, hours, minutes, seconds.
+Numbers can be integers or simple decimals with a decimal point, (eg "1.5h" 90 minutes).
+Numbers without units are milliseconds, i.e. "1s 500" is 1500 ms.
+
 To pass call arguments or an object instance to a method call, use the `options` form of the
 call; see below.
 
@@ -81,4 +86,5 @@ defaults to immediately.
 Changelog
 ---------
 
+- 0.3.0 - allow units in timespec eg '2h 15m'
 - 0.2.0 - first release
