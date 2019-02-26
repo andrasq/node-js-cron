@@ -89,7 +89,7 @@ module.exports = {
             // allow for a possible off-by-one with nodejs setTimeout
             now += 1;
             t.ok(info._start <= now);
-            t.ok(now % 30 < 3);
+            t.ok(now % 30 < 5);
             if (++callCount === 5) {
                 cron.cancelCall(info);
                 t.done();
