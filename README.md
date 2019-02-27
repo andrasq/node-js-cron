@@ -10,7 +10,7 @@ arguments, but does not parse crontab syntax.  Errors are not caught.
 
     qcron = require('qcron');
     // call every hour at 15 past the hour
-    qcron.scheduleCall(myFunction, 15*60*1000, 24*60*1000);
+    qcron.scheduleCall(myFunction, '15m', '1h');
 
 
 API
