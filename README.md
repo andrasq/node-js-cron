@@ -50,7 +50,7 @@ As above, but the call can also be scheduled with an options object containing f
 - repeat - milliseconds between calls, default 0.  Use <= 0 to call only once.
 - self - value of `this` when invoking the function, default null.
 - args - array containing arguments to pass to the function, default [].
-  If not an array an error is thrown.
+  If set but not an array an error is thrown.
 
 No timezone handling, all times are relative to GMT.
 
