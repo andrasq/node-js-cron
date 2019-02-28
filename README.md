@@ -82,9 +82,30 @@ Takes the same arguments as schedule call, either a function with optional at an
 interval, or an options object, but unlike for scheduleCall, here "at" is optional and
 defaults to immediately.
 
+### Cronjob
+
+The returned cronjob object has some properties of note
+
+#### job._start
+
+Next scheduled job start time, in milliseconds.
+
+#### job.pause( )
+
+Cancel the pending job timer and clear the job._timer field.
+If already canceled has no effect.
+
+#### job.resume( )
+
+Reschedule the job for the next runtime.  If not currently paused has no effect.
+
+Note that resume of run-once jobs whose execution time elapsed while paused reschedules them
+for the same time the following day instead of letting them expire unrun.
+
 
 Changelog
 ---------
 
+- 0.4.0 - job pause/resume methods
 - 0.3.0 - allow units in timespec eg '2h 15m'
 - 0.2.0 - first release
