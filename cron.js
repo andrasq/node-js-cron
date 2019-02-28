@@ -29,29 +29,29 @@ Cron.prototype.scheduleCall = function scheduleCall( func, at, repeat ) {
     if (typeof options.at !== 'number') throw new Error('at not a number');
     if (!Array.isArray(options.args)) throw new Error('args not an array');
 
-    var info = {
+    var job = {
         func: options.func, args: options.args, _at: options.at, _repeat: options.repeat,
         _cron: this, _self: options.self || null, _timer: null, _start: null,
         pause: function() { clearTimeout(this._timer); this._timer = null },
         resume: function() { if (!this._timer) startTimer(this) }
     };
 
-    startTimer(info);
-    this.scheduled.push(info);
-    return info;
+    startTimer(job);
+    this.scheduled.push(job);
+    return job;
 
-    function startTimer(info) {
+    function startTimer(job) {
         // use setTimeout to be in control of our schedule
         var now = new Date();
-        info._start = info._cron._findNextRuntime(now, info._at, info._repeat);
-        info._timer = setTimeout(runCall, info._start - +now, info);
-        info._timer.unref && info._timer.unref();
+        job._start = job._cron._findNextRuntime(now, job._at, job._repeat);
+        job._timer = setTimeout(runCall, job._start - +now, job);
+        job._timer.unref && job._timer.unref();
     }
 
-    function runCall(info) {
+    function runCall(job) {
         // run func first to not overlap next run
-        invoke(info.func, info._self, info.args);
-        if (info._repeat > 0) startTimer(info); else info._cron.cancelCall(info);
+        invoke(job.func, job._self, job.args);
+        if (job._repeat > 0) startTimer(job); else job._cron.cancelCall(job);
     }
 }
 
@@ -61,12 +61,12 @@ Cron.prototype.cancelCall = function cancelCall( funcOrInfo ) {
     this.scheduled = new Array();
     var removed = new Array();
     for (var i = 0; i < jobs.length; i++) {
-        var info = jobs[i];
-        if (info.func === funcOrInfo || info === funcOrInfo || funcOrInfo === '_all') {
-            info._timer = (clearTimeout(info._timer), null);
-            removed.push(info);
+        var job = jobs[i];
+        if (job.func === funcOrInfo || job === funcOrInfo || funcOrInfo === '_all') {
+            job.pause();
+            removed.push(job);
         } else {
-            this.scheduled.push(info);
+            this.scheduled.push(job);
         }
     }
     return removed;

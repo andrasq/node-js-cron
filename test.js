@@ -37,15 +37,15 @@ module.exports = {
     },
 
     'should invoke one-shot without repeat': function(t) {
-        var info = cron.scheduleCall(noop, offsetNow(10));
-        t.ok(info._start > Date.now());
+        var job = cron.scheduleCall(noop, offsetNow(10));
+        t.ok(job._start > Date.now());
         t.done();
     },
 
     'should accept human-legible time spec': function(t) {
-        var info;
-        info = cron.scheduleCall(noop, 0, '1000');
-        t.equal(info._repeat, 1000);
+        var job;
+        job = cron.scheduleCall(noop, 0, '1000');
+        t.equal(job._repeat, 1000);
         t.equal(cron.scheduleCall(noop, 0, '2h')._repeat, 7200000);
         t.equal(cron.scheduleCall(noop, 0, '3m')._repeat, 180000);
         t.equal(cron.scheduleCall(noop, 0, '4s')._repeat, 4000);
@@ -59,8 +59,8 @@ module.exports = {
 
     'should cancel a call': function(t) {
         var called = false;
-        var info = cron.scheduleCall(function() { called = true }, 0, 10);
-        cron.cancelCall(info);
+        var job = cron.scheduleCall(function() { called = true }, 0, 10);
+        cron.cancelCall(job);
         setTimeout(function() {
             t.ok(!called);
             t.done();
@@ -82,45 +82,45 @@ module.exports = {
 
     'should run a call at the specified time and interval': function(t) {
         var callCount = 0;
-        var info = cron.scheduleCall(function testCall() {
-            t.equal(info.func, testCall);
-            t.deepEqual(info.args, []);
+        var job = cron.scheduleCall(function testCall() {
+            t.equal(job.func, testCall);
+            t.deepEqual(job.args, []);
             var now = Date.now();
             // allow for a possible off-by-one with nodejs setTimeout
             now += 1;
-            t.ok(info._start <= now);
+            t.ok(job._start <= now);
             t.ok(now % 30 < 5);
             if (++callCount === 5) {
-                cron.cancelCall(info);
+                cron.cancelCall(job);
                 t.done();
             }
         }, 0, 30);
         // _start is set to the call scheduled time
-        t.ok(info._start > Date.now());
+        t.ok(job._start > Date.now());
     },
 
     'should run a call only once': function(t) {
         var callCount = 0;
-        var info = cron.scheduleCall(function() { callCount += 1 }, offsetNow(5));
+        var job = cron.scheduleCall(function() { callCount += 1 }, offsetNow(5));
         setTimeout(function() {
             t.equal(callCount, 1);
-            t.deepEqual(cron.cancelCall(info), []);
+            t.deepEqual(cron.cancelCall(job), []);
             t.done();
         }, 17);
     },
 
     'should schedule a call for two days out': function(t) {
-        var info = cron.scheduleCall(noop, 3 * 24 * 3600 * 1000 + 3600000, 100);
-        t.ok(info._start > Date.now() + 48 * 3600 * 1000);
-        t.equal(info._repeat, 100);
+        var job = cron.scheduleCall(noop, 3 * 24 * 3600 * 1000 + 3600000, 100);
+        t.ok(job._start > Date.now() + 48 * 3600 * 1000);
+        t.equal(job._repeat, 100);
         t.done();
     },
 
     'should schedule a one-shot call for tomorrow if hour already passed': function(t) {
         var now = Date.now();
-        var info = cron.scheduleCall(noop, offsetNow(-10));
-        t.ok(info._start < Date.now() + Cron.msPerDay);
-        t.ok(Date.now() + Cron.msPerDay < info._start + 20);
+        var job = cron.scheduleCall(noop, offsetNow(-10));
+        t.ok(job._start < Date.now() + Cron.msPerDay);
+        t.ok(Date.now() + Cron.msPerDay < job._start + 20);
         t.done();
     },
 
