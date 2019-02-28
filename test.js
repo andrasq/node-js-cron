@@ -158,6 +158,31 @@ module.exports = {
         t.throws(function() { cron.setTimeout(noop, /regex/) }, /not a number/);
         t.done();
     },
+
+    'pause/resume': {
+        'should pause a cronjob': function(t) {
+            var now = Date.now();
+            var tomorrow = now - (now % Cron.msPerDay) + Cron.msPerDay;
+            var job = cron.scheduleCall(noop, 10);
+
+            t.ok(job._timer);
+            t.equal(job._start, tomorrow + 10); // scheduled for the expected time, 10ms past midnight GMT
+            var start1 = job._start;
+
+            job.pause();
+            t.ok(!job._timer);                  // pause cancels the timer
+            job.pause();                        // second pause is a no-op
+
+            job.resume();
+            t.ok(job._timer);                   // resume restarts the timer
+            t.equal(job._start, start1);        // for the same scheduled time as before
+            var timer1 = job._timer;
+            job.resume();
+            t.equal(job._timer, timer1);        // second resume is a no-op
+
+            t.done();
+        },
+    },
 }
 
 function offsetNow( offset ) {
