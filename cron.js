@@ -29,8 +29,12 @@ Cron.prototype.scheduleCall = function scheduleCall( func, at, repeat ) {
     if (typeof options.at !== 'number') throw new Error('at not a number');
     if (!Array.isArray(options.args)) throw new Error('args not an array');
 
-    var info = { func: options.func, args: options.args, _at: options.at, _repeat: options.repeat,
-                 _cron: this, _self: options.self || null, _timer: null, _start: null };
+    var info = {
+        func: options.func, args: options.args, _at: options.at, _repeat: options.repeat,
+        _cron: this, _self: options.self || null, _timer: null, _start: null,
+        pause: function() { clearTimeout(this._timer); this._timer = null },
+        resume: function() { if (!this._timer) startTimer(this) }
+    };
 
     startTimer(info);
     this.scheduled.push(info);
