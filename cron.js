@@ -18,7 +18,7 @@ try { eval("invoke = function(fn, I, av) { I ? fn.apply(I, av) : fn(...av) }") }
 
 function Cron( options ) {
     options = options || {};
-    this.scheduled = new Array();
+    this.jobs = new Array();
 }
 Cron.msPerDay = 24 * 60 * 60 * 1000;
 
@@ -37,7 +37,7 @@ Cron.prototype.scheduleCall = function scheduleCall( func, at, repeat ) {
     };
 
     startTimer(job);
-    this.scheduled.push(job);
+    this.jobs.push(job);
     return job;
 
     function startTimer(job) {
@@ -57,8 +57,8 @@ Cron.prototype.scheduleCall = function scheduleCall( func, at, repeat ) {
 
 // note: cancel is O(n)
 Cron.prototype.cancelCall = function cancelCall( funcOrInfo ) {
-    var jobs = this.scheduled;
-    this.scheduled = new Array();
+    var jobs = this.jobs;
+    this.jobs = new Array();
     var removed = new Array();
     for (var i = 0; i < jobs.length; i++) {
         var job = jobs[i];
@@ -66,7 +66,7 @@ Cron.prototype.cancelCall = function cancelCall( funcOrInfo ) {
             job.pause();
             removed.push(job);
         } else {
-            this.scheduled.push(job);
+            this.jobs.push(job);
         }
     }
     return removed;
