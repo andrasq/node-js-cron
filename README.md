@@ -88,7 +88,12 @@ The returned cronjob object has some properties of note
 
 #### job._start
 
-Next scheduled job start time, in milliseconds.
+Last scheduled start time, in milliseconds.  This may be in the past for paused or currently
+running jobs, but is in the future for waiting jobs.
+
+#### job._timer
+
+The timer for the next run of the job, or `null` if the job has been paused.
 
 #### job.pause( )
 
