@@ -53,6 +53,7 @@ module.exports = {
         t.equal(cron.scheduleCall(noop, 0, '.5s 4000')._repeat, 4500);
         t.equal(cron.scheduleCall(noop, 0, '4.5s 100')._repeat, 4600);
         t.equal(cron.scheduleCall(noop, 0, '1d 2 h 3m4s5')._repeat, 93784005);
+        t.equal(cron.scheduleCall({ func: noop, at: 0, repeat: '2h' })._repeat, 7200000);
         t.throws(function() { cron.scheduleCall(noop, 'x') }, /expected number/);
         t.done();
     },

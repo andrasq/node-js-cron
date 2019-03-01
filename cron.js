@@ -90,10 +90,10 @@ Cron.prototype._findNextRuntime = function _findNextRuntime( nowDate, offset, in
 }
 
 function gatherCallArgs( options, func, at, interval ) {
-    at = parseMs(at);
-    interval = parseMs(interval);
     var src = (typeof func === 'object' && at === undefined && interval === undefined) ? func : { func: func, at: at, repeat: interval };
     for (var k in src) if (src[k] !== undefined) options[k] = src[k];
+    options.at = parseMs(options.at);
+    options.repeat = parseMs(options.repeat);
     return options;
 }
 
