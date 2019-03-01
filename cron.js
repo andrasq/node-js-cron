@@ -51,7 +51,8 @@ Cron.prototype.scheduleCall = function scheduleCall( func, at, repeat ) {
     function runCall(job) {
         // run func first to not overlap next run
         invoke(job.func, job._self, job.args);
-        if (job._repeat > 0) startTimer(job); else job._cron.cancelCall(job);
+        // _timer is cleared if the job is paused
+        if (job._repeat > 0 && job._timer) startTimer(job); else job._cron.cancelCall(job);
     }
 }
 
