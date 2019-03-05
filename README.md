@@ -3,7 +3,7 @@ qcron
 [![Build Status](https://api.travis-ci.org/andrasq/node-qcron.svg?branch=master)](https://travis-ci.org/andrasq/node-qcron?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/andrasq/node-qcron/badge.svg?branch=master)](https://coveralls.io/github/andrasq/node-qcron?branch=master)
 
-Very simple little javascript call scheduler.
+Simple little javascript call scheduler.
 
 It arranges for calls to be made repeatedly on a schedule, optionally passing in call
 arguments, but does not parse crontab syntax.  Errors are not caught.
@@ -73,7 +73,7 @@ this is intended mostly for testing.
 
 ### job = qcron.setTimeout( funcOrOptions, [,at [,interval]] )
 
-Same as `scheduleCall` but starting relative to now, not midnight GMT.  Call "func"
+Same as `scheduleCall` but starting relative to now, not midnight GMT.  Calls "func"
 "at" milliseconds from now (else as soon as possible), then every "interval" milliseconds
 thereafter (else just once).  This just computes the appropriate time offset and calls
 `scheduleCall`.
