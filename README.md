@@ -30,6 +30,11 @@ minutes.  The units must be one of 'd', 'h', 'm', or 's': days, hours, minutes, 
 Numbers can be integers or simple decimals with a decimal point, (eg "1.5h" 90 minutes).
 Numbers without units are milliseconds, i.e. "1s 500" is 1500 ms.
 
+Jobs scheduled for a time offset not less than the milliseconds since 1/1/70 GMT will
+be scheduled to launch at the specified absolute runtime.  As a convenience, the special
+keyword `now` is recognized in timespecs as meaning the current datetime.  `now` is
+additive like the other time formats, so "now 20s" is 20 seconds from now.
+
 To pass call arguments or an object instance to a method call, use the `options` form of the
 call; see below.
 
@@ -111,6 +116,7 @@ for the same time the following day instead of letting them expire unrun.
 Changelog
 ---------
 
+- 0.5.0 - accept 'now' as a time spec, eg `at: 'now 10s'`
 - 0.4.0 - job pause/resume methods, fix timespec units in options object
 - 0.3.0 - allow units in timespec eg '2h 15m'
 - 0.2.0 - first release

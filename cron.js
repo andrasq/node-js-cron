@@ -81,6 +81,7 @@ Cron.prototype.setTimeout = function setTimeout( func, ms, repeat ) {
 
 // given ms after midnight and ms between runs, find the next scheduled runtime in GMT
 Cron.prototype._findNextRuntime = function _findNextRuntime( nowDate, offset, interval ) {
+    if (offset >= nowDate) return offset;
     var midnight = nowDate - nowDate % Cron.msPerDay;
     var next = midnight + offset;
     if (!(interval > 0)) interval = Cron.msPerDay;  // pretend daily if missing
@@ -102,11 +103,12 @@ function parseMs( ms ) {
     if (typeof ms !== 'string') return ms;
 
     var at = 0, match;
-    while ((match = /((\s*[.]\d+|\s*\d+[.]\d*|\s*\d+)\s*([dhms]|))/g.exec(ms))) {
+    while ((match = /(\s*(now|[.]\d+|\d+[.]\d*|\d+)\s*([dhms]|))/g.exec(ms))) {
         ms = ms.slice(match[1].length);
-        at += +match[2] * unitScale[match[3]];
+        if (match[2] === 'now') at += new Date().getTime();
+        else at += +match[2] * unitScale[match[3]];
     }
-    if (ms.length > 0) throw new Error(ms + ': bad time format, expected number[dhms]');
+    if (ms.trim().length > 0) throw new Error(ms + ': bad time format, expected number[dhms]');
 
     return at;
 }
