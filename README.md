@@ -111,6 +111,6 @@ for the same time the following day instead of letting them expire unrun.
 Changelog
 ---------
 
-- 0.4.0 - job pause/resume methods, fix timespect units in options object
+- 0.4.0 - job pause/resume methods, fix timespec units in options object
 - 0.3.0 - allow units in timespec eg '2h 15m'
 - 0.2.0 - first release
