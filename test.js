@@ -28,6 +28,16 @@ module.exports = {
         setTimeout(function() { t.done() }, 10);
     },
 
+    'args should be passed by reference': function(t) {
+        var args = [{ a: [] }];
+        var job = cron.scheduleCall({ at: offsetNow(2), repeat: 2, args: args, func: function(o) { o.a.push(1) } });
+        setTimeout(function() {
+            t.ok(args[0].a.length > 3);
+            cron.cancelCall(job);
+            t.done();
+        }, 10);
+    },
+
     'should invoke with this set to self': function(t) {
         var self = {};
         cron.scheduleCall({ at: offsetNow(10), self: self, func: function() {
